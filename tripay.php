@@ -109,7 +109,8 @@ class DepositController extends Controller {
                     'expired_time'      => (time()+(24*60*60)), // 24 jam
                     'signature'         => hash_hmac('sha256', website_config('tripay_payment')->merchant_code.$merchantRef.$input_data['amount'], website_config('tripay_payment')->private_key)
                 ];
-                $curl = tripay_curl('https://tripay.co.id/api/transaction/create', $header_api, $post_api, 'post');
+		$ipresolve = CURL_IPRESOLVE_V4;	// add IPRESOLVE
+                $curl = tripay_curl('https://tripay.co.id/api/transaction/create', $header_api, $post_api, $ipresolve, 'post');
                 $curl_response = json_decode($curl, true);
                 if (isset($curl_response['success']) AND $curl_response['success'] == false) {
                     return response()->json([
